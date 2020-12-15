@@ -24,17 +24,10 @@ logger.info("Define conditional target files")
 target_files=[]
 
 # Add input target files
-# target_files.append(join("results", "input", "get_transcriptome", "transcriptome_reference.fa"))
-#
-# if config.get("gpu_basecalling", False) is True:
-#     target_files.extend(expand(join("results", "basecalling", "guppy_gpu_4_2_2", "{sample}","sequencing_summary.txt"), sample=samples_list))
-#     target_files.extend(expand(join("results", "basecalling", "merge_fastq_guppy_gpu_4_2_2", "{sample}.fastq"), sample=samples_list))
-# else:
-#     target_files.extend(expand(join("results", "basecalling", "guppy_cpu_4_2_2", "{sample}","sequencing_summary.txt"), sample=samples_list))
-#     target_files.extend(expand(join("results", "basecalling", "merge_fastq_guppy_cpu_4_2_2", "{sample}.fastq"), sample=samples_list))
-
+target_files.append(join("results", "input", "get_transcriptome", "transcriptome_reference.fa"))
 target_files.extend(expand(join("results", "alignment", "minimap2_align", "{sample}.bam"), sample=samples_list))
-target_files.extend(expand(join("results", "alignment", "pbt_aligmnemt_filter", "{sample}.bam"), sample=samples_list))
+target_files.extend(expand(join("results", "alignment", "pbt_alignmemt_filter", "{sample}.bam"), sample=samples_list))
+target_files.extend(expand(join("results", "resquiggling", "f5c_eventalign", "{sample}.tsv"), sample=samples_list))
 
 # if config.get("nanocompore", None):
 #     target_files.append("nanocompore_out_files")
@@ -61,7 +54,7 @@ rule all:
 include: "workflow/rules/input.smk"
 include: "workflow/rules/basecalling.smk"
 include: "workflow/rules/alignment.smk"
-#include: "workflow/rules/nanopolish.smk"
+include: "workflow/rules/resquiggling.smk"
 # include: "workflow/rules/qc.smk"
 # include: "workflow/rules/quantification.smk"
 # include: "workflow/rules/nanocompore.smk"

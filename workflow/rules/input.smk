@@ -8,13 +8,13 @@ from snakemake.remote.HTTP import RemoteProvider as HTTP
 
 ##### Define RemoteProvider if needed #####
 
-transcriptome_fa = config["transcriptome_ref"]
+transcriptome_ref = config["transcriptome_ref"]
 
-if transcriptome_fa.startswith("ftp"):
-    transcriptome_fa = FTP().remote(transcriptome_fa)
+if transcriptome_ref.startswith("ftp"):
+    transcriptome_ref = FTP().remote(transcriptome_ref)
 
-elif transcriptome_fa.startswith("http"):
-    transcriptome_fa = HTTP().remote(transcriptome_fa)
+elif transcriptome_ref.startswith("http"):
+    transcriptome_ref = HTTP().remote(transcriptome_ref)
 
 
 ##### Rules #####
@@ -23,9 +23,9 @@ module_name = "input"
 
 rule_name="get_transcriptome"
 rule get_transcriptome:
-    input: fa=transcriptome_fa
+    input: fasta=transcriptome_ref
     output:
-        fa = join("results", module_name, rule_name, "transcriptome_reference.fa"),
+        fasta = join("results", module_name, rule_name, "transcriptome_reference.fa"),
         fai = join("results", module_name, rule_name, "transcriptome_reference.fa.fai")
     log: join("logs",module_name, rule_name, "transcriptome_reference.log")
     threads: get_threads(config, rule_name)

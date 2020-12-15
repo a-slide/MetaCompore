@@ -10,7 +10,7 @@ properties:
     type: string
     description: Path to an ENSEMBL FASTA reference transcriptome file/URL to be used for read mapping (local, FTP or HTTP)
 properties:
-  gpu_basecalling:
+  gpu_acceleration:
     type: boolean
     description: Is true use gpus for basecalling (requires CUDA libs)
 properties:
@@ -45,7 +45,7 @@ properties:
 # entries that have to be in the config file for successful validation
 required:
   - transcriptome_ref
-  - gpu_basecalling
+  - gpu_acceleration
   - nanocompore
   - eligos2
   - xpore
