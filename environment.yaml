@@ -1,0 +1,9 @@
+name: MetaCompore
+
+channels:
+  - bioconda
+  - conda-forge
+
+dependencies:
+  - python=3.8
+  - snakemake>=5.30.1

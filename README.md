@@ -1,10 +1,8 @@
-# Snakemake workflow: MetaCompore
+# MetaCompore
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.30.1-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![Build Status](https://travis-ci.org/snakemake-workflows/MetaCompore.svg?branch=master)](https://travis-ci.org/snakemake-workflows/MetaCompore)
 
-This is the template for a new Snakemake workflow. Replace this text with a comprehensive description covering the purpose and domain.
-Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs`. Define the entry point of the workflow in the `Snakefile` and the main configuration in the `config.yaml` file.
+**Metacompore is a snakemake pipeline Running multiple RNA modifications detection tools for RNA modification detection**
 
 ## Authors
 
@@ -12,24 +10,67 @@ Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs
 
 ## Usage
 
-If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) repository and, if available, its DOI (see above).
+### Step 1: Install dependencies
 
-### Step 1: Obtain a copy of this workflow
+#### Singularity
 
-1. Create a new github repository using this workflow [as a template](https://help.github.com/en/articles/creating-a-repository-from-a-template).
-2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the newly created repository to your local system, into the place where you want to perform the data analysis.
+If required, install singularity following the official documentation: https://sylabs.io/guides/3.7/user-guide/quick_start.html
 
-### Step 2: Configure workflow
+#### Conda / Mamba
 
-Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.tsv` to specify your sample setup.
+**This is optional if you chose option 3 to install snakemake**
 
-### Step 3: Install Snakemake
+Install miniconda following the official documentation: https://docs.conda.io/en/latest/miniconda.html
 
-Install Snakemake using [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html):
+you can also install mamba to speed up snakemake installation: https://github.com/mamba-org/mamba
 
-    conda create -c bioconda -c conda-forge -n snakemake snakemake
+#### Install snakemake
 
-For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
+**1) Conda option**
+
+Create a virtual environment containing snakemake with [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) or
+```
+conda env create -f environment.yaml
+```
+
+**2) Mamba option**
+
+You can also use [mamba](https://github.com/mamba-org/mamba) which will give you the same result, but much faster
+
+```
+mamba env create -f environment.yaml
+```
+
+**3) Singularity option**
+
+Alternatively, you can also pull a snakemake container with singularity
+
+```
+singularity pull --arch amd64 library://aleg/default/snakemake:5.30.1
+```
+
+### Step 2: Obtain a copy of this workflow
+
+Clone this github repository to your local system, into the place where you want to perform the data analysis
+
+```
+git clone git@github.com:a-slide/MetaCompore.git {local_directory}
+cd {local_directory}
+```
+
+### Step 3: Configure workflow
+
+Configure the workflow according to your needs by editing the files `config.yaml` to configure the workflow execution,
+
+```
+nano config.yaml
+```
+
+Edit the `samples.tsv` to specify your sample setup and fast5 source files
+
+```
+nano samples.tsv
+```
 
 ### Step 4: Execute workflow
 
@@ -101,4 +142,3 @@ In case you have also changed or added steps, please consider contributing them 
 ## Testing
 
 Test cases are in the subfolder `.test`. They are automatically executed via continuous integration with [Github Actions](https://github.com/features/actions).
-

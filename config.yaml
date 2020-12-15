@@ -1,0 +1,54 @@
+
+##### Source files #####
+
+# Path to an ENSEMBL FASTA reference transcriptome file/URL to be used for read mapping (local, FTP or HTTP)
+
+transcriptome_ref: "data/reference/transcriptome_reference.fa"
+
+##### Conditional execution of pipeline #####
+
+gpu_basecalling: False
+nanocompore: True
+eligos2: True
+xpore: True
+tombo: True
+mines: True
+epinano: True
+differr_nanopore_DRS: True
+
+##### Individual rules configuration #####
+
+get_transcriptome:
+    threads: 1
+    mem_mb: 1000
+    opt: ""
+
+ont_guppy:
+    threads: 4
+    mem_mb: 6000
+    opt: "-c rna_r9.4.1_70bps_hac.cfg --records_per_fastq 0 --recursive --disable_pings --calib_detect --num_callers 4 --cpu_threads_per_caller 1"
+    # example GPU options if using gpu_basecalling instead
+    #opt: "-c rna_r9.4.1_70bps_hac.cfg --records_per_fastq 0 --recursive --disable_pings --calib_detect --num_callers 8 --gpu_runners_per_device 1 --device 'auto'"
+
+merge_fastq:
+    threads: 1
+    mem_mb: 1000
+    opt: "--remove_duplicates --min_len 50 --min_qual 7"
+    #opt: "--remove_duplicates --min_len 100 --min_qual 7"
+
+minimap2_index:
+    threads: 1
+    mem_mb: 1000
+    opt: ""
+
+minimap2_align:
+    threads: 4
+    mem_mb: 1000
+    opt: "-a -x sr"
+    #opt: "-a -L -x map-ont"
+
+pbt_aligmnemt_filter:
+    threads: 1
+    mem_mb: 1000
+    opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_align_len 50 --min_mapq 10 --min_freq_identity 0.8"
+    #opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_read_len 100 --min_align_len 100 --min_mapq 10 --min_freq_identity 0.8"
