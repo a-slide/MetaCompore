@@ -133,3 +133,4 @@ dmypy.json
 data
 logs
 results
+.panoptes.db

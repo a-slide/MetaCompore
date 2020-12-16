@@ -24,10 +24,9 @@ logger.info("Define conditional target files")
 target_files=[]
 
 # Add input target files
-target_files.append(join("results", "input", "get_transcriptome", "transcriptome_reference.fa"))
-target_files.extend(expand(join("results", "alignment", "minimap2_align", "{sample}.bam"), sample=samples_list))
-target_files.extend(expand(join("results", "alignment", "pbt_alignmemt_filter", "{sample}.bam"), sample=samples_list))
-target_files.extend(expand(join("results", "resquiggling", "f5c_eventalign", "{sample}.tsv"), sample=samples_list))
+target_files.extend(expand(join("results", "resquiggling", "nanopolish_eventalign_gather", "{sample}.tsv.gz"), sample=samples_list))
+target_files.extend(expand(join("results", "quality_control", "pycoQC", "pycoQC_{sample}.json"), sample=samples_list))
+target_files.extend(expand(join("results", "quality_control", "pycoQC", "pycoQC_{sample}.html"), sample=samples_list))
 
 # if config.get("nanocompore", None):
 #     target_files.append("nanocompore_out_files")
@@ -55,7 +54,8 @@ include: "workflow/rules/input.smk"
 include: "workflow/rules/basecalling.smk"
 include: "workflow/rules/alignment.smk"
 include: "workflow/rules/resquiggling.smk"
-# include: "workflow/rules/qc.smk"
+include: "workflow/rules/quality_control.smk"
+
 # include: "workflow/rules/quantification.smk"
 # include: "workflow/rules/nanocompore.smk"
 # include: "workflow/rules/eligos2.smk"

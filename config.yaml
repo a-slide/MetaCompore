@@ -47,19 +47,43 @@ minimap2_align:
     opt: "-a -L -x sr -p 0 -N 10"
     #opt: "-a -L -x map-ont"
 
-pbt_aligmnemt_filter:
+pbt_alignmemt_filter:
     threads: 1
     mem_mb: 1000
-    opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_align_len 50 --min_mapq 10 --min_freq_identity 0.8"
+    opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_align_len 50 --min_mapq 5 --min_freq_identity 0.8"
     #opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_read_len 100 --min_align_len 100 --min_mapq 10 --min_freq_identity 0.8"
 
-f5c_index:
-    threads: 4
-    mem_mb: 1000
-    opt: "--iop 4"
+# f5c_index:
+#     threads: 4
+#     mem_mb: 1000
+#     opt: "--iop 4"
+#
+# f5c_eventalign:
+#     threads: 4
+#     mem_mb: 1000
+#     opt: "-x laptop-low --print-read-names --scale-events --kmer-model resources/r9.4_70bps.u_to_t_rna.5mer.template.model"
+#     #opt: "-x laptop-low --samples --print-read-names --scale-events --kmer-model resources/r9.4_70bps.u_to_t_rna.5mer.template.model"
 
-f5c_eventalign:
+nanopolish_index:
     threads: 4
     mem_mb: 1000
-    opt: "-x laptop-low --print-read-names --scale-events --kmer-model resources/r9.4_70bps.u_to_t_rna.5mer.template.model"
-    #opt: "-x laptop-low --samples --print-read-names --scale-events --kmer-model resources/r9.4_70bps.u_to_t_rna.5mer.template.model"
+    opt: ""
+
+pbt_alignment_split:
+    opt: "--index"
+    n_chunks: 3 #### Can be increased to speed up nanopolish
+
+nanopolish_eventalign:
+    threads: 4
+    mem_mb: 1000
+    opt: " --samples --print-read-names --scale-events"
+
+nanopolish_eventalign_gather:
+    threads: 1
+    mem_mb: 1000
+    opt: ""
+
+pycoQC:
+    threads: 1
+    mem_mb: 1000
+    opt: "--skip_coverage_plot --filter_calibration --filter_duplicated --min_pass_len 100 --min_pass_qual 7"

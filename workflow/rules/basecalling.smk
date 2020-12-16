@@ -17,7 +17,7 @@ rule_name = "ont_guppy"
 rule ont_guppy:
     input: fast5_dir = get_fast5
     output:
-        seq_sum = join("results", module_name, rule_name, "{sample}","sequencing_summary.txt"),
+        seqsum = join("results", module_name, rule_name, "{sample}","sequencing_summary.txt"),
         fastq_dir = directory(join("results", module_name, rule_name, "{sample}"))
     log: join("logs", module_name, rule_name, "{sample}.log")
     threads: get_threads(config, rule_name)

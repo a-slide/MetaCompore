@@ -32,4 +32,4 @@ rule get_transcriptome:
     params: opt=get_opt(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
     container: "library://aleg/default/metacompore_python:3.8.6"
-    script: f"../scripts/{rule_name}.py"
+    script: f"../scripts/get_transcriptome.py"

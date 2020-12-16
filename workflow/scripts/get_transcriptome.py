@@ -29,11 +29,10 @@ def get_transcriptome(fa_input, fa_output, fai_output, log):
         logging.exception('Error while running get_transcriptome')
         raise
 
-
 ##### RUN SCRIPT FUNCTION #####
 
 get_transcriptome(
-    fa_input = str(snakemake.input.fa), # str required for FTP or HTTP sources
-    fa_output = snakemake.output.fa,
+    fa_input = str(snakemake.input.fasta), # str required for FTP or HTTP sources
+    fa_output = snakemake.output.fasta,
     fai_output = snakemake.output.fai,
     log = snakemake.log[0])
