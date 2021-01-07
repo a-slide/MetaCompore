@@ -3,7 +3,7 @@
 
 # Path to an ENSEMBL FASTA reference transcriptome file/URL to be used for read mapping (local, FTP or HTTP)
 
-transcriptome_ref: "data/reference/transcriptome_reference.fa"
+transcriptome_ref: "data/yeast/reference/reference_transcriptome.fa"
 
 ##### Conditional execution of pipeline #####
 
@@ -33,8 +33,7 @@ ont_guppy:
 merge_fastq:
     threads: 1
     mem_mb: 1000
-    opt: "--remove_duplicates --min_len 50 --min_qual 7"
-    #opt: "--remove_duplicates --min_len 100 --min_qual 7"
+    opt: "--remove_duplicates --min_len 100 --min_qual 7"
 
 minimap2_index:
     threads: 1
@@ -44,14 +43,14 @@ minimap2_index:
 minimap2_align:
     threads: 4
     mem_mb: 1000
-    opt: "-a -L -x sr -p 0 -N 10"
-    #opt: "-a -L -x map-ont"
+    opt: "-a -L -x map-ont"
+    # opt: "-a -L -x sr -p 0 -N 10"
 
 pbt_alignmemt_filter:
     threads: 1
     mem_mb: 1000
-    opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_align_len 50 --min_mapq 5 --min_freq_identity 0.8"
-    #opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_read_len 100 --min_align_len 100 --min_mapq 10 --min_freq_identity 0.8"
+    opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_read_len 100 --min_align_len 100 --min_mapq 10 --min_freq_identity 0.8"
+    #opt: "--skip_unmapped --skip_secondary --skip_supplementary --orientation '+' --min_align_len 50 --min_mapq 5 --min_freq_identity 0.8"
 
 # f5c_index:
 #     threads: 4

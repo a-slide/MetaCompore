@@ -28,6 +28,7 @@ target_files.extend(expand(join("results", "resquiggling", "nanopolish_eventalig
 target_files.extend(expand(join("results", "quality_control", "pycoQC", "pycoQC_{sample}.json"), sample=samples_list))
 target_files.extend(expand(join("results", "quality_control", "pycoQC", "pycoQC_{sample}.html"), sample=samples_list))
 
+
 # if config.get("nanocompore", None):
 #     target_files.append("nanocompore_out_files")
 # if config.get("eligos2", None):
@@ -57,6 +58,7 @@ include: "workflow/rules/resquiggling.smk"
 include: "workflow/rules/quality_control.smk"
 
 # include: "workflow/rules/quantification.smk"
+
 # include: "workflow/rules/nanocompore.smk"
 # include: "workflow/rules/eligos2.smk"
 # include: "workflow/rules/xpore.smk"
