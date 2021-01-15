@@ -6,7 +6,6 @@ import gzip
 import logging
 
 ##### DEFINE SCRIPT FUNCTION #####
-
 def nanopolish_eventalign_gather(input_tsv_list, input_summary_list, output_tsv, output_summary, log):
 
     logging.basicConfig(filename=log, filemode="w", level=logging.DEBUG)

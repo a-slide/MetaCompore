@@ -14,9 +14,9 @@ rule pycoQC:
         seqsum = rules.ont_guppy.output.seqsum,
         bam = rules.pbt_alignmemt_filter.output.bam
     output:
-        json = join("results", module_name, rule_name, "pycoQC_{sample}.json"),
-        html = join("results", module_name, rule_name, "pycoQC_{sample}.html")
-    log: join("logs", module_name, rule_name, "{sample}.log")
+        json = join("results", module_name, rule_name, "pycoQC_{cond}_{rep}.json"),
+        html = join("results", module_name, rule_name, "pycoQC_{cond}_{rep}.html")
+    log: join("logs", module_name, rule_name, "{cond}_{rep}.log")
     threads: get_threads(config, rule_name)
     params: opt = get_opt(config, rule_name)
     resources: mem_mb = get_mem(config, rule_name)

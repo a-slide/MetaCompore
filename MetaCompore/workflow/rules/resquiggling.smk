@@ -23,7 +23,7 @@ module_name = "resquiggling"
 #         index_fai = rules.merge_fastq.output.fastq+".index.fai",
 #         index_gzi = rules.merge_fastq.output.fastq+".index.gzi",
 #         index_readdb = rules.merge_fastq.output.fastq+".index.readdb"
-#     log: join("logs", module_name, rule_name, "{sample}.log")
+#     log: join("logs", module_name, rule_name, "{cond}_{rep}.log")
 #     threads: get_threads(config, rule_name)
 #     params: opt=get_opt(config, rule_name)
 #     resources: mem_mb=get_mem(config, rule_name)
@@ -37,8 +37,8 @@ module_name = "resquiggling"
 #         index = rules.f5c_index.output.index,
 #         bam = rules.pbt_alignmemt_filter.output.bam,
 #         fasta = rules.get_transcriptome.output.fasta
-#     output: tsv=join("results", module_name, rule_name, "{sample}.tsv")
-#     log: join("logs", module_name, rule_name, "{sample}.log")
+#     output: tsv=join("results", module_name, rule_name, "{cond}_{rep}.tsv")
+#     log: join("logs", module_name, rule_name, "{cond}_{rep}.log")
 #     threads: get_threads(config, rule_name)
 #     params: opt=get_opt(config, rule_name)
 #     resources: mem_mb=get_mem(config, rule_name)
@@ -56,7 +56,7 @@ rule nanopolish_index:
         index_fai = rules.merge_fastq.output.fastq+".index.fai",
         index_gzi = rules.merge_fastq.output.fastq+".index.gzi",
         index_readdb = rules.merge_fastq.output.fastq+".index.readdb"
-    log: join("logs", module_name, rule_name, "{sample}.log")
+    log: join("logs", module_name, rule_name, "{cond}_{rep}.log")
     threads: get_threads(config, rule_name)
     params: opt=get_opt(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
@@ -74,9 +74,9 @@ rule_name="pbt_alignment_split"
 rule pbt_alignment_split:
     input: bam = rules.pbt_alignmemt_filter.output.bam
     output:
-        bam=temp(expand(join("results", module_name, rule_name, "{{sample}}", "{chunk}.bam"), chunk=chunk_list)),
-        bam_index=temp(expand(join("results", module_name, rule_name, "{{sample}}", "{chunk}.bam.bai"), chunk=chunk_list))
-    log: join("logs", module_name, rule_name, "{sample}.log")
+        bam=temp(expand(join("results", module_name, rule_name, "{{cond}}_{{rep}}", "{chunk}.bam"), chunk=chunk_list)),
+        bam_index=temp(expand(join("results", module_name, rule_name, "{{cond}}_{{rep}}", "{chunk}.bam.bai"), chunk=chunk_list))
+    log: join("logs", module_name, rule_name, "{cond}_{rep}.log")
     params: opt=get_opt(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
     container: "library://aleg/default/pybiotools:0.2.4"
@@ -88,21 +88,27 @@ rule nanopolish_eventalign:
         fastq = rules.merge_fastq.output.fastq,
         index = rules.nanopolish_index.output.index,
         fasta = rules.get_transcriptome.output.fasta,
-        bam = join("results", module_name, "pbt_alignment_split", "{sample}", "{chunk}.bam"),
-        bam_index = join("results", module_name, "pbt_alignment_split", "{sample}", "{chunk}.bam.bai")
-    output: tsv=temp(join("results", module_name, rule_name, "{sample}","{chunk}.tsv"))
-    log: join("logs", module_name, rule_name, "{sample}", "{chunk}.log")
+        bam = join("results", module_name, "pbt_alignment_split", "{cond}_{rep}", "{chunk}.bam"),
+        bam_index = join("results", module_name, "pbt_alignment_split", "{cond}_{rep}", "{chunk}.bam.bai")
+    output:
+        tsv=temp(join("results", module_name, rule_name, "{cond}_{rep}","{chunk}_data.tsv")),
+        summary=temp(join("results", module_name, rule_name, "{cond}_{rep}","{chunk}_summary.tsv")),
+    log: join("logs", module_name, rule_name, "{cond}_{rep}", "{chunk}.log")
     threads: get_threads(config, rule_name)
     params: opt=get_opt(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
     container: "library://aleg/default/nanopolish:0.13.2"
-    shell: "nanopolish eventalign {params.opt} -v -t {threads} -r {input.fastq} -b {input.bam} -g {input.fasta} > {output.tsv} 2> {log}"
+    shell: "nanopolish eventalign {params.opt} -v -t {threads} -r {input.fastq} -b {input.bam} -g {input.fasta} --summary {output.summary} > {output.tsv} 2> {log}"
 
 rule_name="nanopolish_eventalign_gather"
 rule nanopolish_eventalign_gather:
-    input: tsv_list=expand(join("results", module_name, "nanopolish_eventalign","{{sample}}", "{chunk}.tsv"), chunk=chunk_list)
-    output: tsv=join("results", module_name, rule_name, "{sample}.tsv.gz")
-    log: join("logs", module_name, rule_name, "{sample}.log")
+    input:
+        tsv_list=expand(join("results", module_name, "nanopolish_eventalign","{{cond}}_{{rep}}", "{chunk}_data.tsv"), chunk=chunk_list),
+        summary_list=expand(join("results", module_name, "nanopolish_eventalign","{{cond}}_{{rep}}", "{chunk}_summary.tsv"), chunk=chunk_list)
+    output:
+        tsv=join("results", module_name, rule_name, "{cond}_{rep}_data.tsv"),
+        summary=join("results", module_name, rule_name, "{cond}_{rep}_summary.tsv")
+    log: join("logs", module_name, rule_name, "{cond}_{rep}.log")
     threads: get_threads(config, rule_name)
     params: opt=get_opt(config, rule_name),
     resources: mem_mb=get_mem(config, rule_name)

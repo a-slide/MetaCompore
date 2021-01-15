@@ -25,9 +25,9 @@ rule minimap2_align:
         idx = rules.minimap2_index.output.idx,
         fastq = rules.merge_fastq.output.fastq
     output:
-        bam = join("results", module_name, rule_name, "{sample}.bam"),
-        bam_index = join("results", module_name, rule_name, "{sample}.bam.bai")
-    log: join("logs",module_name, rule_name, "{sample}.log")
+        bam = join("results", module_name, rule_name, "{cond}_{rep}.bam"),
+        bam_index = join("results", module_name, rule_name, "{cond}_{rep}.bam.bai")
+    log: join("logs",module_name, rule_name, "{cond}_{rep}.log")
     threads: get_threads(config, rule_name)
     params: opt = get_opt(config, rule_name)
     resources: mem_mb = get_mem(config, rule_name)
@@ -43,9 +43,9 @@ rule pbt_alignmemt_filter:
         bam = rules.minimap2_align.output.bam,
         bam_index = rules.minimap2_align.output.bam_index
     output:
-        bam = join("results", module_name, rule_name, "{sample}.bam"),
-        bam_index = join("results", module_name, rule_name, "{sample}.bam.bai")
-    log: join("logs",module_name, rule_name, "{sample}.log")
+        bam = join("results", module_name, rule_name, "{cond}_{rep}.bam"),
+        bam_index = join("results", module_name, rule_name, "{cond}_{rep}.bam.bai")
+    log: join("logs",module_name, rule_name, "{cond}_{rep}.log")
     threads: get_threads(config, rule_name)
     params: opt = get_opt(config, rule_name)
     resources: mem_mb = get_mem(config, rule_name)

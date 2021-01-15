@@ -8,12 +8,13 @@ transcriptome_ref: "data/yeast/reference/reference_transcriptome.fa"
 ##### Conditional execution of pipeline #####
 
 gpu_acceleration: False
-nanocompore: True
-eligos2: True
-xpore: True
+quality_control: True
 tombo: True
-mines: True
-epinano: True
+nanocompore: False
+eligos2: False
+xpore: False
+mines: False
+epinano: False
 differr_nanopore_DRS: True
 
 ##### Individual rules configuration #####
@@ -63,6 +64,8 @@ pbt_alignmemt_filter:
 #     opt: "-x laptop-low --print-read-names --scale-events --kmer-model resources/r9.4_70bps.u_to_t_rna.5mer.template.model"
 #     #opt: "-x laptop-low --samples --print-read-names --scale-events --kmer-model resources/r9.4_70bps.u_to_t_rna.5mer.template.model"
 
+# Nanopolish parameters
+
 nanopolish_index:
     threads: 4
     mem_mb: 1000
@@ -75,12 +78,47 @@ pbt_alignment_split:
 nanopolish_eventalign:
     threads: 4
     mem_mb: 1000
-    opt: " --samples --print-read-names --scale-events"
+    opt: " --samples --print-read-names --scale-events --signal-index" # Options required for nanocompore and xpore
 
 nanopolish_eventalign_gather:
     threads: 1
     mem_mb: 1000
     opt: ""
+
+# nnanocompore parameters
+
+nanocompore_eventalign_collapse:
+    threads: 4
+    mem_mb: 1000
+    opt: ""
+
+nanocompore_sampcomp:
+    threads: 4
+    mem_mb: 1000
+    opt: "--max_invalid_kmers_freq 0.1 --min_coverage 30 --downsample_high_coverage 5000 --min_ref_length 100 --comparison_methods GMM,KS --sequence_context 2 --sequence_context_weights harmonic --pvalue_thr 0.01 --logit"
+
+# tombo parameters
+
+tombo_preprocess:
+    threads: 4
+    mem_mb: 1000
+    opt: ""
+
+tombo_detect_modifications:
+    threads: 4
+    mem_mb: 1000
+    opt: "--minimum-test-reads 50 --fishers-method-context 2 --statistic-type ks --store-p-value"
+
+tombo_postprocess:
+    threads: 1
+    mem_mb: 1000
+    opt:
+        min_cov: 50
+        p_val_lim: 0.01
+        quantile_lim: 0.5
+        min_distance: 9
+
+# quality_control parameters
 
 pycoQC:
     threads: 1

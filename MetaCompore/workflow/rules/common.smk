@@ -25,13 +25,28 @@ def samples_load_validate(samplefile, schema):
     samples_df = pd.read_csv (samplefile, comment="#", skip_blank_lines=True, sep="\t")
     validate(samples_df, schema=schema)
     samples_df.set_index("sample_id", drop=True, inplace=True)
+
+    # Check that conditions and control and test
+    conditions = sorted(list(samples_df["condition"].unique()))
+    if conditions != ["control", "test"]:
+        logger.error("Metacompore requires exactly 2 conditions: `control` and `test`")
+        sys.exit()
+
+    # Check that the conditions have the same replicates
+    rep1 = sorted(list(samples_df["replicate"][samples_df["condition"]=="control"]))
+    rep2 = sorted(list(samples_df["replicate"][samples_df["condition"]=="test"]))
+    if rep1 != rep2:
+        logger.error("The 2 condition groups requires the same number of replicates")
+        sys.exit()
+
     logger.debug(samples_df)
     return samples_df
 
 ##### Getter functions #####
 
 def get_fast5 (wildcards):
-    return samples_df.loc[wildcards.sample, "fast5_dir"]
+    res = samples_df[(samples_df["condition"]==wildcards.cond)&(samples_df["replicate"]==int(wildcards.rep))]
+    return res["fast5_dir"][0]
 
 def get_threads (config, rule_name, default=1):
     try:
