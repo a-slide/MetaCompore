@@ -18,39 +18,48 @@ samples_df = samples_load_validate(samplefile="samples.tsv", schema="workflow/sc
 samples_list=list(samples_df.index)
 replicates_list=list(samples_df["replicate"].unique())
 condition_list=list(samples_df["condition"].unique())
-logger.info(f"samples found: {samples_list}")
 logger.info(f"replicates found: {replicates_list}")
 logger.info(f"condition found: {condition_list}")
 
 ##### Define all output files depending on config file #####
 
-logger.info("Define conditional target files")
+logger.info("Defining target files")
 target_files=[]
 
 # Add input target files
-target_files.extend(expand(join("results", "resquiggling", "nanopolish_eventalign_gather", "{cond}_{rep}_data.tsv"), cond=condition_list, rep=replicates_list))
-target_files.extend(expand(join("results", "resquiggling", "nanopolish_eventalign_gather", "{cond}_{rep}_summary.tsv"), cond=condition_list, rep=replicates_list))
+target_files.extend(expand(join("results", "alignment", "alignmemt_postfilter", "{cond}_{rep}.bam"), cond=condition_list, rep=replicates_list))
+target_files.extend(expand(join("results", "alignment", "alignmemt_merge", "{cond}.bam"), cond=condition_list))
+target_files.extend(expand(join("results", "resquiggling", "f5c_eventalign", "{cond}_{rep}_data.tsv"), cond=condition_list, rep=replicates_list))
+target_files.extend(expand(join("results", "resquiggling", "f5c_eventalign", "{cond}_{rep}_summary.tsv"), cond=condition_list, rep=replicates_list))
 
 if config.get("quality_control", None):
+    logger.info("Defining target files for `quality_control` rules")
     target_files.extend(expand(join("results", "quality_control", "pycoQC", "pycoQC_{cond}_{rep}.json"), cond=condition_list, rep=replicates_list))
     target_files.extend(expand(join("results", "quality_control", "pycoQC", "pycoQC_{cond}_{rep}.html"), cond=condition_list, rep=replicates_list))
 
+if config.get("nanocompore", None):
+    logger.info("Defining target files for `nanocompore` rules")
+    target_files.append(join("results", "nanocompore", "nanocompore_sampcomp", "outnanocompore_results.tsv"))
+
 if config.get("tombo", None):
+    logger.info("Defining target files for `tombo` rules")
     target_files.append(join("results", "tombo", "tombo_postprocess", "tombo_results.tsv"))
 
-if config.get("nanocompore", None):
-    target_files.extend(expand(join("results", "nanocompore", "eventalign_collapse", "{cond}_{rep}", "out_eventalign_collapse.tsv"), cond=condition_list, rep=replicates_list))
+if config.get("differr", None):
+    logger.info("Defining target files for `differr` rules")
+    target_files.append(join("results", "differr", "differr_compare", "differr_results.bed"))
 
-# if config.get("eligos2", None):
-#     target_files.append("eligos2_out_files")
+if config.get("eligos2", None):
+    logger.info("Defining target files for `eligos2` rules")
+    target_files.append(join("results", "eligos2", "eligos2_pair_diff_mod", "test_vs_control_on_transcriptome_reference_combine.txt"))
+
+
 # if config.get("xpore", None):
 #     target_files.append("xpore_out_files")
 # if config.get("mines", None):
 #     target_files.append("mines_out_files")
 # if config.get("epinano", None):
 #     target_files.append("epinano_out_files")
-# if config.get("differr_nanopore_DRS", None):
-#     target_files.append("differr_nanopore_DRS_out_files")
 
 ##### Set main rule #####
 
@@ -66,11 +75,11 @@ include: "workflow/rules/resquiggling.smk"
 include: "workflow/rules/quality_control.smk"
 include: "workflow/rules/nanocompore.smk"
 include: "workflow/rules/tombo.smk"
+include: "workflow/rules/differr.smk"
+include: "workflow/rules/eligos2.smk"
 
-# include: "workflow/rules/eligos2.smk"
 # include: "workflow/rules/xpore.smk"
 # include: "workflow/rules/mines.smk"
 # include: "workflow/rules/epinano.smk"
-# include: "workflow/rules/differr_nanopore_DRS.smk"
 
 # include: "workflow/rules/quantification.smk" #### Need multiple mappers if needed

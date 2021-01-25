@@ -93,7 +93,7 @@ tombo_postprocess (
     fasta=snakemake.input.fasta,
     stats_tsv=snakemake.output.stats_tsv,
     log = snakemake.log[0],
-    min_cov=snakemake.params.opt.get("min_cov", 60),
+    min_cov=snakemake.params.opt.get("min_cov", 50),
     p_val_lim=snakemake.params.opt.get("p_val_lim", 0.01),
     quantile_lim=snakemake.params.opt.get("quantile_lim", 0.5),
     min_distance=snakemake.params.opt.get("min_distance", 9))

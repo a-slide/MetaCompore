@@ -52,18 +52,21 @@ def get_threads (config, rule_name, default=1):
     try:
         return config[rule_name]["threads"]
     except (KeyError, TypeError):
+        logger.error("Could not find value `threads` for rule `{}` in config file".format(rule_name))
         return default
 
 def get_opt (config, rule_name, default=""):
     try:
         return config[rule_name]["opt"]
     except KeyError:
+        logger.error("Could not find value `opt` for rule `{}` in config file".format(rule_name))
         return default
 
 def get_mem (config, rule_name, default=1000):
     try:
-        return config[rule_name]["mem"]
+        return config[rule_name]["mem_mb"]
     except KeyError:
+        logger.error("Could not find value `mem_mb` for rule `{}` in config file".format(rule_name))
         return default
 
 ##### Helper functions #####

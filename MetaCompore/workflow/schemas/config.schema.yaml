@@ -18,6 +18,14 @@ properties:
     type: boolean
     description: If True run nanocompore
 properties:
+  tombo:
+    type: boolean
+    description: If True run tombo
+properties:
+  differr:
+    type: boolean
+    description: If True run differr_nanopore_DRS
+properties:
   eligos2:
     type: boolean
     description: If True run eligos2
@@ -26,10 +34,6 @@ properties:
     type: boolean
     description: If True run xpore
 properties:
-  tombo:
-    type: boolean
-    description: If True run tombo
-properties:
   mines:
     type: boolean
     description: If True run mines
@@ -37,19 +41,15 @@ properties:
   epinano:
     type: boolean
     description: If True run epinano
-properties:
-  differr_nanopore_DRS:
-    type: boolean
-    description: If True run differr_nanopore_DRS
 
 # entries that have to be in the config file for successful validation
 required:
   - transcriptome_ref
   - gpu_acceleration
   - nanocompore
+  - tombo
+  - differr
   - eligos2
   - xpore
-  - tombo
   - mines
   - epinano
-  - differr_nanopore_DRS
