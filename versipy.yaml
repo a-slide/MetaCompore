@@ -1,0 +1,21 @@
+version:
+  major: 0
+  minor: 0
+  micro: 0
+  a: null
+  b: null
+  rc: null
+  post: null
+  dev: null
+managed_values:
+  __package_name__: MetaCompore
+  __package_description__: Metacompore is a snakemake pipeline Running multiple RNA modifications detection tools for RNA modification detection
+  __package_url__: https://github.com/a-slide/MetaCompore
+  __package_licence__: MIT
+  __package_licence_url__: https://mit-license.org/
+  __author_name__: Adrien Leger
+  __author_email__: contact@adrienleger.com
+  __author_url__: https://adrienleger.com
+  __citation__: Adrien Leger. a-slide/MetaCompore. Zenodo. [Not yet available]
+managed_files:
+  .versipy/README.md: README.md
