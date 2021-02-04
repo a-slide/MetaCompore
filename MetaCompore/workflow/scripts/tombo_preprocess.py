@@ -26,4 +26,3 @@ shell("tombo preprocess annotate_raw_with_fastqs --fast5-basedir {output_fast5_d
 
 shell("echo '## tombo resquiggle ##' >> {log}")
 shell("tombo resquiggle --rna --overwrite --processes {threads} {output_fast5_dir} {fasta} &>> {log}")
-# shell("touch {output.done}")

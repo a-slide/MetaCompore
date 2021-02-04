@@ -1,0 +1,7 @@
+__default__:
+  - "-P project2"
+  - "-W 1:05"
+
+foo:
+  - "-P gpu"
+  - "-gpu 'gpu resources'"

@@ -6,13 +6,16 @@ from collections import OrderedDict
 import logging
 from pyBioTools import Fasta
 from pyfaidx import Faidx
-
+import datetime
 
 ##### DEFINE SCRIPT FUNCTION #####
 
 def get_transcriptome(fa_input, fa_output, fai_output, log):
 
-    logging.basicConfig(filename=log, filemode="w", level=logging.DEBUG)
+    logging.basicConfig(filename=log, filemode="w", level=logging.INFO, format='%(message)s')
+    logging.info("timestamp: {}".format(str(datetime.datetime.now())))
+    for i, j in locals().items():
+        logging.info("\t{}: {}\n".format(i,j))
 
     try:
         # Parse fasta file uncompress and simplify transcript ids

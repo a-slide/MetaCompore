@@ -12,7 +12,8 @@ rule_name = "pycoQC"
 rule pycoQC:
     input:
         seqsum = rules.ont_guppy.output.seqsum,
-        bam = rules.minimap2_align.output.bam
+        bam = rules.minimap2_align.output.bam,
+        bam_index = rules.minimap2_align.output.bam_index
     output:
         json = join("results", module_name, rule_name, "pycoQC_{cond}_{rep}.json"),
         html = join("results", module_name, rule_name, "pycoQC_{cond}_{rep}.html")

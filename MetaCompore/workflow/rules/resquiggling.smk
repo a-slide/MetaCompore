@@ -36,7 +36,8 @@ rule f5c_eventalign:
         fastq=rules.merge_fastq.output.fastq,
         index=rules.f5c_index.output.index,
         bam=rules.alignmemt_postfilter.output.bam,
-        fasta=rules.get_transcriptome.output.fasta
+        fasta=rules.get_transcriptome.output.fasta,
+        kmer_model="resources/f5c/r9.4_70bps.u_to_t_rna.5mer.template.model"
     output:
         tsv=join("results", module_name, rule_name, "{cond}_{rep}_data.tsv"),
         summary=join("results", module_name, rule_name, "{cond}_{rep}_summary.tsv")
@@ -45,4 +46,4 @@ rule f5c_eventalign:
     params: opt=get_opt(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
     container: f5c_container
-    shell: "f5c eventalign {params.opt} -t {threads} -r {input.fastq} -b {input.bam} -g {input.fasta} --summary {output.summary}  > {output.tsv} 2> {log}"
+    shell: "f5c eventalign {params.opt} -t {threads} --kmer-model {input.kmer_model} -r {input.fastq} -b {input.bam} -g {input.fasta} --summary {output.summary}  > {output.tsv} 2> {log}"

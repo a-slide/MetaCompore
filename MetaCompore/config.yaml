@@ -13,16 +13,20 @@ nanocompore: True
 tombo: True
 differr: True
 eligos2: True
+mines: True
 xpore: False
-mines: False
 epinano: False
 
 ##### Individual rules configuration #####
+
+# Input data parameters
 
 get_transcriptome:
     threads: 1
     mem_mb: 1000
     opt: ""
+
+# Basecalling  parameters
 
 ont_guppy:
     threads: 4
@@ -35,6 +39,8 @@ merge_fastq:
     threads: 1
     mem_mb: 1000
     opt: "--remove_duplicates --min_len 100 --min_qual 7"
+
+# Alignment parameters
 
 minimap2_index:
     threads: 1
@@ -72,6 +78,15 @@ alignmemt_merge:
     mem_mb: 1000
     opt: ""
 
+# QC parameters
+
+pycoQC:
+    threads: 1
+    mem_mb: 1000
+    opt: "--skip_coverage_plot --filter_calibration --filter_duplicated --min_pass_len 100 --min_pass_qual 7"
+
+# f5c parameters
+
 f5c_index:
     threads: 4
     mem_mb: 1000
@@ -80,32 +95,9 @@ f5c_index:
 f5c_eventalign:
     threads: 4
     mem_mb: 1000
-    opt: "-x laptop-low --rna --samples --signal-index --print-read-names --scale-events --kmer-model resources/r9.4_70bps.u_to_t_rna.5mer.template.model"
+    opt: "-x laptop-low --rna --samples --signal-index --print-read-names --scale-events"
 
-# Nanopolish parameters
-
-nanopolish_index:
-    threads: 4
-    mem_mb: 1000
-    opt: ""
-
-alignment_split:
-    threads: 1
-    mem_mb: 1000
-    opt: "--index"
-    n_chunks: 3 #### Can be increased to speed up nanopolish
-
-nanopolish_eventalign:
-    threads: 4
-    mem_mb: 1000
-    opt: "--samples --print-read-names --scale-events --signal-index" # Options required for nanocompore and xpore
-
-eventalign_merge:
-    threads: 1
-    mem_mb: 1000
-    opt: ""
-
-# nanocompore parameters
+# Nanocompore parameters
 
 nanocompore_eventalign_collapse:
     threads: 4
@@ -120,7 +112,10 @@ nanocompore_sampcomp:
 nanocompore_postprocess:
     threads: 1
     mem_mb: 1000
-    opt: ""
+    opt:
+        p_val_lim: 0.01
+        quantile_lim: 0.5
+        min_distance: 9
 
 # tombo parameters
 
@@ -129,16 +124,16 @@ tombo_preprocess:
     mem_mb: 1000
     opt: ""
 
-tombo_detect_modifications:
+tombo_level_sample_compare:
     threads: 4
     mem_mb: 1000
-    opt: "--minimum-test-reads 50 --fishers-method-context 2 --statistic-type ks --store-p-value"
+    opt: "--minimum-test-reads 30 --fishers-method-context 2 --statistic-type ks --store-p-value"
 
 tombo_postprocess:
     threads: 1
     mem_mb: 1000
     opt:
-        min_cov: 50
+        min_cov: 30
         p_val_lim: 0.01
         quantile_lim: 0.5
         min_distance: 9
@@ -155,7 +150,6 @@ differr_postprocess:
     mem_mb: 1000
     opt: ""
 
-
 # eligos2 parameters
 
 eligos2_fasta_to_bed:
@@ -166,12 +160,43 @@ eligos2_fasta_to_bed:
 eligos2_pair_diff_mod:
     threads: 4
     mem_mb: 1000
-    opt: "--oddR 0 --esb 0 --min_depth 30"
-    #--oddR 1.2 --pval 0.01 --adjPval 0.01
+    opt: "--oddR 0 --esb 0 --min_depth 30 --pval 1 --adjPval 1"
 
-# quality_control parameters
-
-pycoQC:
+eligos2_postprocess:
     threads: 1
     mem_mb: 1000
-    opt: "--skip_coverage_plot --filter_calibration --filter_duplicated --min_pass_len 100 --min_pass_qual 7"
+    opt:
+        min_oddR: 1.2
+        min_esb: 0
+        min_cov: 30
+        max_adj_pval: 0.01
+        discard_homopolymers: True
+        ref_base: "A"
+
+# Mines parameters
+
+tombo_de_novo:
+    threads: 4
+    mem_mb: 1000
+    opt: "--rna --minimum-test-reads 30 --fishers-method-context 2"
+
+tombo_de_novo_text_output:
+    threads: 1
+    mem_mb: 1000
+    opt: ""
+
+mines_wig2bed:
+    threads: 1
+    mem_mb: 1000
+    opt: ""
+
+mines_cdna:
+    threads: 1
+    mem_mb: 1000
+    opt: ""
+
+mines_postprocess:
+    threads: 1
+    mem_mb: 1000
+    opt:
+        min_cov: 30

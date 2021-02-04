@@ -40,5 +40,21 @@ rule nanocompore_sampcomp:
     container: "library://aleg/default/nanocompore:1.0.3"
     script: f"../scripts/nanocompore_sampcomp.py"
 
-# rule_name="nanocompore_postprocess"
-# rule nanocompore_postprocess:
+rule_name="nanocompore_postprocess"
+rule nanocompore_postprocess:
+    input:
+        res_tsv=rules.nanocompore_sampcomp.output.res_tsv,
+        fasta=rules.get_transcriptome.output.fasta
+    output:
+        join("results", "final", "nanocompore_results_GMM_context_0.tsv"),
+        join("results", "final", "nanocompore_results_GMM_context_2.tsv"),
+        join("results", "final", "nanocompore_results_KS_dwell_context_0.tsv"),
+        join("results", "final", "nanocompore_results_KS_dwell_context_2.tsv"),
+        join("results", "final", "nanocompore_results_KS_intensity_context_0.tsv"),
+        join("results", "final", "nanocompore_results_KS_intensity_context_2.tsv")
+    log: join("logs", module_name, rule_name, "out.log"),
+    threads: get_threads(config, rule_name)
+    params: opt=get_opt(config, rule_name)
+    resources: mem_mb=get_mem(config, rule_name)
+    container: "library://aleg/default/metacompore_python:3.8.6"
+    script: "../scripts/nanocompore_postprocess.py"

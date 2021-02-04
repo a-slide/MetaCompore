@@ -4,6 +4,7 @@
 from os.path import join
 from snakemake.logging import logger
 from snakemake.utils import min_version
+from glob import glob
 min_version("5.30.0")
 
 include: "workflow/rules/common.smk"
@@ -15,7 +16,6 @@ config = config_load_validate(configfile="config.yaml", schema="workflow/schemas
 
 logger.info("Loading and checking sample file")
 samples_df = samples_load_validate(samplefile="samples.tsv", schema="workflow/schemas/samples.schema.yaml")
-samples_list=list(samples_df.index)
 replicates_list=list(samples_df["replicate"].unique())
 condition_list=list(samples_df["condition"].unique())
 logger.info(f"replicates found: {replicates_list}")
@@ -39,25 +39,32 @@ if config.get("quality_control", None):
 
 if config.get("nanocompore", None):
     logger.info("Defining target files for `nanocompore` rules")
-    target_files.append(join("results", "nanocompore", "nanocompore_sampcomp", "outnanocompore_results.tsv"))
+    target_files.append(join("results", "final", "nanocompore_results_GMM_context_0.tsv"))
+    target_files.append(join("results", "final", "nanocompore_results_GMM_context_2.tsv"))
+    target_files.append(join("results", "final", "nanocompore_results_KS_dwell_context_0.tsv"))
+    target_files.append(join("results", "final", "nanocompore_results_KS_dwell_context_2.tsv"))
+    target_files.append(join("results", "final", "nanocompore_results_KS_intensity_context_0.tsv"))
+    target_files.append(join("results", "final", "nanocompore_results_KS_intensity_context_2.tsv"))
 
 if config.get("tombo", None):
     logger.info("Defining target files for `tombo` rules")
-    target_files.append(join("results", "tombo", "tombo_postprocess", "tombo_results.tsv"))
+    target_files.append(join("results", "final", "tombo_results.tsv"))
 
 if config.get("differr", None):
     logger.info("Defining target files for `differr` rules")
-    target_files.append(join("results", "differr", "differr_compare", "differr_results.bed"))
+    target_files.append(join("results", "final", "differr_results.tsv"))
 
 if config.get("eligos2", None):
     logger.info("Defining target files for `eligos2` rules")
-    target_files.append(join("results", "eligos2", "eligos2_pair_diff_mod", "test_vs_control_on_transcriptome_reference_combine.txt"))
+    target_files.append(join("results", "final", "eligos2_results.tsv"))
 
+if config.get("mines", None):
+    logger.info("Defining target files for `mines` rules")
+    target_files.append(join("results", "final", "mines_results.tsv"))
 
 # if config.get("xpore", None):
 #     target_files.append("xpore_out_files")
-# if config.get("mines", None):
-#     target_files.append("mines_out_files")
+
 # if config.get("epinano", None):
 #     target_files.append("epinano_out_files")
 
@@ -77,9 +84,6 @@ include: "workflow/rules/nanocompore.smk"
 include: "workflow/rules/tombo.smk"
 include: "workflow/rules/differr.smk"
 include: "workflow/rules/eligos2.smk"
-
+include: "workflow/rules/mines.smk"
 # include: "workflow/rules/xpore.smk"
-# include: "workflow/rules/mines.smk"
 # include: "workflow/rules/epinano.smk"
-
-# include: "workflow/rules/quantification.smk" #### Need multiple mappers if needed
