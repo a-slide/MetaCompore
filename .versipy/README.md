@@ -18,6 +18,8 @@ Clone the last tarball archive of the pipeline to your local system, into the pl
 
 ```
 wget https://github.com/a-slide/MetaCompore/releases/download/0.0.3/MetaCompore.tar.gz
+tar xzf MetaCompore.tar.gz
+cd MetaCompore
 ```
 
 ### Step 2: Install dependencies
