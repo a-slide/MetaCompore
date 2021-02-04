@@ -134,3 +134,5 @@ data
 logs
 results
 .panoptes.db
+*.ipynb
+.config/
