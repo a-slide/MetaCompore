@@ -1,6 +1,8 @@
-# MetaCompore
+# MetaCompore v0.1.0
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.30.1-brightgreen.svg)](https://snakemake.bitbucket.io)
+
+---
 
 **Metacompore is a snakemake pipeline Running multiple RNA modifications detection tools for RNA modification detection**
 
@@ -12,11 +14,10 @@
 
 ### Step 1: Obtain a copy of this workflow
 
-Clone this github repository to your local system, into the place where you want to perform the data analysis
+Clone the last tarball archive of the pipeline to your local system, into the place where you want to perform the data analysis
 
 ```
-git clone git@github.com:a-slide/MetaCompore.git {local_directory}
-cd {local_directory}
+wget https://github.com/a-slide/MetaCompore/releases/download/0.0.3/MetaCompore.tar.gz
 ```
 
 ### Step 2: Install dependencies
@@ -27,15 +28,11 @@ If required, install singularity following the official documentation: https://s
 
 #### Conda / Mamba
 
-**This is not required if you choose option 2 to install snakemake**
-
 Install miniconda following the official documentation: https://docs.conda.io/en/latest/miniconda.html
 
 you can also install mamba to speed up snakemake installation: https://github.com/mamba-org/mamba
 
 #### Snakemake
-
-**1) Conda/Mamba option**
 
 Create a virtual environment containing snakemake with [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) or
 ```
@@ -46,14 +43,6 @@ You can also use [mamba](https://github.com/mamba-org/mamba) which will give you
 
 ```
 mamba env create -f environment.yaml
-```
-
-**2) Singularity option**
-
-Alternatively, you can also pull a snakemake container with singularity
-
-```
-singularity pull --arch amd64 library://aleg/default/snakemake:5.30.1
 ```
 
 ### Step 3: Configure the workflow
@@ -72,13 +61,7 @@ nano samples.tsv
 
 ### Step 4: Execute workflow
 
-#### With Singularity
-
-```
-singularity run snakemake_5.30.1.sif --use-singularity -j 4
-```
-
-#### With conda
+### Local Mode
 
 Activate the conda environment:
 
@@ -87,4 +70,32 @@ conda activate snakemake
 snakemake --use-singularity -j 4
 ```
 
-### Step 5: Investigate results
+### LSF cluster Mode
+
+Set an LSF cluster profile https://github.com/Snakemake-Profiles/lsf
+
+Edit the lsf rule specific config file `lsf.yaml`
+
+
+
+## Disclaimer
+
+Please be aware that MetaCompore is a research package that is still under development.
+
+It was tested under Linux Ubuntu 16.04 and in an HPC environment running under Red Hat Enterprise 7.1.
+
+Thank you
+
+## citation
+
+Adrien Leger. a-slide/MetaCompore. Zenodo. [Not yet available]
+
+## licence
+
+MIT (https://mit-license.org/)
+
+Copyright © 2020 Adrien Leger
+
+## Authors
+
+* Adrien Leger / contact@adrienleger.com / https://adrienleger.com

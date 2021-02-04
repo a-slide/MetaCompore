@@ -1,1 +1,2 @@
 2021-02-04 12:59:16.607824	0.0.0	Initialise versipy history
+2021-02-04 13:21:26.939922	0.1.0	first versipy assisted release
