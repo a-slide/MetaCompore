@@ -1,4 +1,4 @@
-# MetaCompore v0.1.0
+# MetaCompore v0.1.1
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.30.1-brightgreen.svg)](https://snakemake.bitbucket.io)
 
@@ -18,6 +18,8 @@ Clone the last tarball archive of the pipeline to your local system, into the pl
 
 ```
 wget https://github.com/a-slide/MetaCompore/releases/download/0.0.3/MetaCompore.tar.gz
+tar xzf MetaCompore.tar.gz
+cd MetaCompore
 ```
 
 ### Step 2: Install dependencies
