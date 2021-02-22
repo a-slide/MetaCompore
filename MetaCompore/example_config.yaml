@@ -52,11 +52,6 @@ minimap2_align:
     mem_mb: 1000
     opt: "-a -L -x map-ont"
 
-alignmemt_reads_index:
-    threads: 1
-    mem_mb: 1000
-    opt: "--skip_unmapped --skip_secondary --skip_supplementary"
-
 alignmemt_prefilter:
     threads: 1
     mem_mb: 1000
@@ -275,4 +270,3 @@ epinano_predict:
 epinano_delta_predict:
     threads: 1
     mem_mb: 8000
-
