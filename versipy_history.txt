@@ -1,3 +1,4 @@
 2021-02-04 12:59:16.607824	0.0.0	Initialise versipy history
 2021-02-04 13:21:26.939922	0.1.0	first versipy assisted release
 2021-02-04 15:09:17.429634	0.1.1	readme update
+2021-02-22 09:14:09.983599	0.1.2	Add epinano support

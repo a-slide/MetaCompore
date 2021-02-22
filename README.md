@@ -1,4 +1,4 @@
-# MetaCompore v0.1.1
+# MetaCompore v0.1.2
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.30.1-brightgreen.svg)](https://snakemake.bitbucket.io)
 
