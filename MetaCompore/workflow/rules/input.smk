@@ -33,3 +33,14 @@ rule get_transcriptome:
     resources: mem_mb=get_mem(config, rule_name)
     container: "library://aleg/default/metacompore_python:3.8.6"
     script: f"../scripts/get_transcriptome.py"
+
+rule_name="generate_transcriptome_picard_index"
+rule generate_transcriptome_picard_index:
+    input: fasta=rules.get_transcriptome.input.fasta
+    output:
+        picard_dict = join("results", module_name, "get_transcriptome", "transcriptome_reference.fa.dict"),
+    log: join("logs",module_name, rule_name, "transcriptome_reference_picard.log")
+    threads: 1
+    resources: mem_mb=get_mem(config, rule_name)
+    container: "docker://broadinstitute/picard"
+    shell: "java -jar /usr/picard/picard.jar CreateSequenceDictionary R={input.fasta} O={output.picard_dict}"

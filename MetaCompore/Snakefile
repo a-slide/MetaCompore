@@ -65,8 +65,8 @@ if config.get("mines", None):
 # if config.get("xpore", None):
 #     target_files.append("xpore_out_files")
 
-# if config.get("epinano", None):
-#     target_files.append("epinano_out_files")
+if config.get("epinano", None):
+    target_files.append(join("results", "final", "epinano_results.tsv"))
 
 ##### Set main rule #####
 
@@ -86,4 +86,4 @@ include: "workflow/rules/differr.smk"
 include: "workflow/rules/eligos2.smk"
 include: "workflow/rules/mines.smk"
 # include: "workflow/rules/xpore.smk"
-# include: "workflow/rules/epinano.smk"
+include: "workflow/rules/epinano.smk"

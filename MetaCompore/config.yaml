@@ -3,19 +3,19 @@
 
 # Path to an ENSEMBL FASTA reference transcriptome file/URL to be used for read mapping (local, FTP or HTTP)
 
-transcriptome_ref: "data/yeast/reference/reference_transcriptome.fa"
+transcriptome_ref: "/home/tleonardi/programming/bioinformatics/MetaCompore/fast5_subset/reference_transcriptome_selected.fa"
 
 ##### Conditional execution of pipeline #####
 
 gpu_acceleration: False
-quality_control: True
+quality_control: False
 nanocompore: True
-tombo: True
+tombo: False
 differr: True
 eligos2: True
-mines: True
+mines: False
 xpore: False
-epinano: False
+epinano: True
 
 ##### Individual rules configuration #####
 
@@ -200,3 +200,79 @@ mines_postprocess:
     mem_mb: 1000
     opt:
         min_cov: 30
+
+
+# Epinano paramters
+# Could not find value `threads` for rule `ont_guppy_epinano` in config fileCould not find value `opt` for rule `ont_guppy_epinano` in config file
+
+ont_guppy_epinano:
+    threads: 4
+    mem_mb: 6000
+    opt: "-c rna_r9.4.1_70bps_hac.cfg --records_per_fastq 0 --recursive --disable_pings --calib_detect --num_callers 4 --cpu_threads_per_caller 1"
+    # example GPU options if using gpu_basecalling instead
+    #opt: "-c rna_r9.4.1_70bps_hac.cfg --records_per_fastq 0 --recursive --disable_pings --calib_detect --num_callers 8 --gpu_runners_per_device 1 --device 'auto'"
+
+merge_fastq_epinano:
+    threads: 1
+    mem_mb: 1000
+    opt: "--remove_duplicates --min_len 100 --min_qual 7"
+
+minimap2_align_epinano:
+    threads: 4
+    mem_mb: 1000
+    opt: "-a --MD -x map-ont"
+
+alignmemt_prefilter_epinano:
+    threads: 1
+    mem_mb: 1000
+    opt: "--skip_unmapped --skip_secondary --skip_supplementary --index_reads --orientation '+' --min_read_len 100 --min_align_len 100 --min_mapq 10 --min_freq_identity 0.8"
+
+min_ref_coverage_epinano:
+    threads: 1
+    mem_mb: 1000
+    opt:
+        min_cov: 30
+
+alignmemt_postfilter_epinano:
+    threads: 1
+    mem_mb: 1000
+    opt: "--index_reads"
+
+epinano_postprocess:
+    threads: 1
+    mem_mb: 1000
+
+alignmemt_merge_epinano:
+    threads: 4
+    mem_mb: 1000
+    opt: ""
+
+epinano_delta_variants:
+    threads: 1
+    mem_mb: 8000
+    opt:
+        min_cov: 30
+
+generate_transcriptome_picard_index:
+    mem_mb: 1000
+
+epinano_variants:
+    threads: 1
+    mem_mb: 8000
+
+epinano_filter_rrach_variants:
+    threads: 1
+    mem_mb: 1000
+
+epinano_gather_variants:
+    threads: 1
+    mem_mb: 1000
+
+epinano_predict:
+    threads: 1
+    mem_mb: 8000
+
+epinano_delta_predict:
+    threads: 1
+    mem_mb: 8000
+
