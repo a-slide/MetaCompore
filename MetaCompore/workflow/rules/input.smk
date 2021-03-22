@@ -43,4 +43,9 @@ rule generate_transcriptome_picard_index:
     threads: 1
     resources: mem_mb=get_mem(config, rule_name)
     container: "docker://broadinstitute/picard"
-    shell: "java -jar /usr/picard/picard.jar CreateSequenceDictionary R={input.fasta} O={output.picard_dict}"
+    shell: 
+        """
+        perl -pe "s/'$/primesymbol/" {input.fasta} > {input.fasta}.sanitized
+        java -jar /usr/picard/picard.jar CreateSequenceDictionary R={input.fasta}.sanitized O={output.picard_dict}.sanitized
+        perl -pe "s/primesymbol/'/" {output.picard_dict}.sanitized > {output.picard_dict}
+        """
