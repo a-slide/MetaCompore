@@ -143,7 +143,7 @@ rule epinano_variants:
     log: join("logs",module_name, rule_name, "{cond}.{scatteritem}.log"),
     threads: get_threads(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
-    container: "epinano_1.2.0.sif"
+    container: "library://aleg/default/epinano:1.2.0"
     shell:
         """
         Epinano_Variants -R {input.fasta} -b {input.bam} -n {threads} -T t -s /usr/EpiNano/misc/sam2tsv.jar
@@ -161,7 +161,7 @@ rule epinano_filter_rrach_variants:
     log: join("logs",module_name, rule_name, "{cond}.{scatteritem}.log"),
     threads: get_threads(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
-    container: "epinano_1.2.0.sif"
+    container: "library://aleg/default/epinano:1.2.0"
     script: "../scripts/epinano_filter_kmers.py"
 
 rule_name="epinano_gather_variants"
@@ -173,7 +173,7 @@ rule epinano_gather_variants:
     log: join("logs",module_name, rule_name, "{cond}.log"),
     threads: get_threads(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
-    container: "epinano_1.2.0.sif"
+    container: "library://aleg/default/epinano:1.2.0"
     shell: "cat {input} | awk 'NR==1 || !/^#/' > {output}"
 
 rule_name="epinano_predict"
@@ -185,7 +185,7 @@ rule epinano_predict:
     log: join("logs",module_name, rule_name, "{cond}.log"),
     threads: get_threads(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
-    container: "epinano_1.2.0.sif"
+    container: "library://aleg/default/epinano:1.2.0"
     shell: "Epinano_Predict -o $(dirname {output.predictions})/{wildcards.cond} -M /usr/EpiNano/models/rrach.q3.mis3.del3.linear.dump -p {input.variants} -cl 8,13,23"
 
 rule_name="epinano_delta_variants"
@@ -199,7 +199,7 @@ rule epinano_delta_variants:
     threads: get_threads(config, rule_name)
     params: opt=get_opt(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
-    container: "epinano_1.2.0.sif"
+    container: "library://aleg/default/epinano:1.2.0"
     shell: "python /usr/EpiNano/misc/Epinano_make_delta.py {input.test_variants} {input.control_variants} {params.opt[min_cov]} 5 > {output.delta}"
 
 rule_name="epinano_delta_predict"
@@ -212,7 +212,7 @@ rule epinano_delta_predict:
     threads: get_threads(config, rule_name)
     params: opt=get_opt(config, rule_name)
     resources: mem_mb=get_mem(config, rule_name)
-    container: "epinano_1.2.0.sif"
+    container: "library://aleg/default/epinano:1.2.0"
     shell: "Epinano_Predict -o $(dirname {output.predictions})/test_control -M /usr/EpiNano/models/rrach.deltaQ3.deltaMis3.deltaDel3.linear.dump -p {input.delta_variants} -cl 7,12,22"
 
 
